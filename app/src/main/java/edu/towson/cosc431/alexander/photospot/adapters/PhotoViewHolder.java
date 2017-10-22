@@ -22,7 +22,7 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
     private Photo photo;
     private IController controller;
-    private TextView photoTitle;
+    private TextView photoTitle, photoDescription;
     private ImageView imageView;
 
     public PhotoViewHolder(View itemView, final IController controller) {
@@ -31,7 +31,7 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                //controller.deleteTodo(todo);
+                //controller.deletePhoto(photo);
                 return false;
             }
         });
@@ -42,12 +42,13 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
             }
         });
         photoTitle = (TextView) itemView.findViewById(R.id.photoTitle);
+        photoDescription = (TextView) itemView.findViewById(R.id.photoDescription);
         imageView = (ImageView) itemView.findViewById(R.id.imageView);
     }
 
     public void bindTodo(Photo photo) {
         photoTitle.setText(photo.getTitle());
-        //Picasso.with(itemView.getContext()).load(photo.getImageURL()).into(imageView);
+        photoDescription.setText(photo.getDescription());
         Picasso.with(itemView.getContext()).load(photo.getImageURL()).fit().into(imageView);
         this.photo = photo;
     }
