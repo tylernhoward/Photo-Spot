@@ -1,10 +1,12 @@
 package edu.towson.cosc431.alexander.photospot;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +24,7 @@ import edu.towson.cosc431.alexander.photospot.models.Photo;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IController {
+    private static final int FULLSCREEN_REQUEST_CODE = 42;
 
     private ArrayList<Photo> photos;
     private FloatingActionButton fab;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     private PhotosAdapter adapter;
     private NavigationView navigationView;
     private RecyclerView recyclerView;
+    private Photo photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +70,10 @@ public class MainActivity extends AppCompatActivity
 
     private void buildPhotos() {
         photos = new ArrayList<>();
-        photos.add(new Photo("Towson U", "Test Description", "https://www.towson.edu/careercenter/images/stephens-exterior-01-m.jpg"));
-        photos.add(new Photo("Towson University", "Test Description 2", "https://i.ytimg.com/vi/1q8WD3MZ8qc/maxresdefault.jpg"));
-        photos.add(new Photo("Towson", "Towson description", "http://1.bp.blogspot.com/-Q7pZJOtG7og/VOexnE53nNI/AAAAAAAAVz8/kRG7F86_D6c/s1600/201_1Towson_Mall_new_edition.jpg"));
-        photos.add(new Photo("Towson MD", "Towson is okay I guess", "https://i.ytimg.com/vi/ep_Zdwhza_o/maxresdefault.jpg"));
-
+        photos.add(new Photo("Towson U", "Test Description", "https://www.towson.edu/careercenter/images/stephens-exterior-01-m.jpg", "Unknown"));
+        photos.add(new Photo("Towson University", "Test Description 2", "https://i.ytimg.com/vi/1q8WD3MZ8qc/maxresdefault.jpg", "Unknown"));
+        photos.add(new Photo("Towson", "Towson description", "http://1.bp.blogspot.com/-Q7pZJOtG7og/VOexnE53nNI/AAAAAAAAVz8/kRG7F86_D6c/s1600/201_1Towson_Mall_new_edition.jpg", "Unknown"));
+        photos.add(new Photo("Towson MD", "Towson is okay I guess", "https://i.ytimg.com/vi/ep_Zdwhza_o/maxresdefault.jpg", "Unknown"));
     }
 
     @Override
@@ -128,4 +131,20 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void fullScreenImage(Photo photo)
+    {
+        //this.photo = photo;
+        Intent intent = new Intent(getBaseContext(), single_photo_activity.class);
+        intent.putExtra("PHOTO", photo);
+        startActivity(intent);
+        //startActivityForResult(intent, FULLSCREEN_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 }
