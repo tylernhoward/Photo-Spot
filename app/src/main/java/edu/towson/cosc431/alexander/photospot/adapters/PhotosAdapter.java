@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import edu.towson.cosc431.alexander.photospot.IController;
 import edu.towson.cosc431.alexander.photospot.R;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
-import edu.towson.cosc431.alexander.photospot.IController;
 
 
 /**

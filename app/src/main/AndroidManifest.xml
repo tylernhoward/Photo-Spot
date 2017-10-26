@@ -3,6 +3,10 @@
     package="edu.towson.cosc431.alexander.photospot">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.LOCATION_HARDWARE"/>
+    <uses-feature android:name="android.hardware.Camera"
+        android:required="false"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".single_photo_activity"></activity>>
+        <activity android:name=".SinglePhotoActivity"></activity>>
     </application>
 
 </manifest>
