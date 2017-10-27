@@ -1,12 +1,13 @@
 package edu.towson.cosc431.alexander.photospot;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,7 +19,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import edu.towson.cosc431.alexander.photospot.adapters.PhotosAdapter;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
@@ -35,6 +40,8 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     private RecyclerView recyclerView;
     private Photo photo;
+    private String currentPhotoPath;
+    private static IController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,7 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         buildPhotos();
+        controller = this;
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +116,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -140,25 +147,69 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void fullScreenImage(Photo photo) {
+    public void displayFullScreenImage(Photo photo) {
         Intent intent = new Intent(getBaseContext(), SinglePhotoActivity.class);
         intent.putExtra(Constants.getPhotoExtraTag(), photo);
         startActivity(intent);
     }
 
     @Override
+    public void addPhoto(Photo photo) {
+        photos.add(photo);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.getRequestImageCapture() && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-           // mImageView.setImageBitmap(imageBitmap);
+            Intent intent = new Intent(getBaseContext(), NewPhotoActivity.class);
+            intent.putExtra(Constants.getCapturedPhotoTag(), currentPhotoPath);
+            startActivityForResult(intent, Constants.getRequestNewPhoto());
         }
     }
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, Constants.getRequestImageCapture());
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, Constants.getRequestImageCapture());
+            }
         }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    public static IController getController() {
+        return controller;
+    }
+
+    public void refresh() {
+        adapter.notifyDataSetChanged();
     }
 }

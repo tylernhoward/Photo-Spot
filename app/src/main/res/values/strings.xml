@@ -6,4 +6,8 @@
     <string name="title_activity_main">Photo Spot</string>
     <string name="full_photo_takenby_label">Taken by:</string>
     <string name="company">COSC 431</string>
+    <string name="title">Title</string>
+    <string name="author">Author</string>
+    <string name="description">Description</string>
+    <string name="save">Save</string>
 </resources>

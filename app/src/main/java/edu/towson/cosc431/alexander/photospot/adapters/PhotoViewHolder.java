@@ -12,7 +12,7 @@ import edu.towson.cosc431.alexander.photospot.R;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 
 /**
- * Created by pkmna on 10/15/2017.
+ * Created by Josh on 10/15/2017.
  */
 
 public class PhotoViewHolder extends RecyclerView.ViewHolder {
@@ -34,7 +34,7 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controller.fullScreenImage(photo);
+                controller.displayFullScreenImage(photo);
             }
         });
 
