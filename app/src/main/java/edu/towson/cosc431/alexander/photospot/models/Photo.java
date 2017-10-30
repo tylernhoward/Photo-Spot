@@ -6,7 +6,10 @@ import java.io.Serializable;
  * Created by pkmna on 10/22/2017.
  */
 
-public class Photo implements Serializable{
+public class Photo implements Serializable {
+    private String title;
+    private String description;
+    private String author;
     private String imageURL;
 
     public Photo(String title, String description, String imageUrl, String author) {
@@ -47,8 +50,4 @@ public class Photo implements Serializable{
     public void setDescription(String description) {
         this.description = description;
     }
-
-    private String title;
-    private String description;
-    private String author;
 }

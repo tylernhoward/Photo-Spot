@@ -1,7 +1,7 @@
 package edu.towson.cosc431.alexander.photospot.adapters;
 
 /**
- * Created by pkmna on 10/15/2017.
+ * Created by Josh on 10/15/2017.
  */
 
 import android.support.v7.widget.RecyclerView;
@@ -11,14 +11,9 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import edu.towson.cosc431.alexander.photospot.IController;
 import edu.towson.cosc431.alexander.photospot.R;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
-import edu.towson.cosc431.alexander.photospot.IController;
-
-
-/**
- * Created by pkmna on 10/2/2017.
- */
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
 
