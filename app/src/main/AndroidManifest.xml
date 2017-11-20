@@ -39,6 +39,7 @@
         <activity android:name=".SinglePhotoActivity" />
         >
         <activity android:name=".NewPhotoActivity" />
+        <activity android:name=".SlideshowActivity"></activity>
     </application>
 
 </manifest>

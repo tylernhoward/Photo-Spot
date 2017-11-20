@@ -3,6 +3,7 @@ package edu.towson.cosc431.alexander.photospot;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ import edu.towson.cosc431.alexander.photospot.models.Photo;
 public class SinglePhotoActivity extends AppCompatActivity {
     private ImageView imageView;
     private TextView title, author, desc;
-    private ImageButton fav;
+    private CheckBox fav;
     private Photo photo;
     private IModel photoModel = new PhotoModel(PhotoDataSource.getInstance(this));
     private IController controller;
@@ -38,10 +39,11 @@ public class SinglePhotoActivity extends AppCompatActivity {
         desc = (TextView) findViewById(R.id.photo_description);
         author = (TextView) findViewById(R.id.photo_author);
         imageView = (ImageView) findViewById(R.id.big_image_view);
-        fav = (ImageButton)findViewById(R.id.favoriteBtn);
+        fav = (CheckBox)findViewById(R.id.favoriteBtn);
         title.setText(photo.getTitle());
         author.setText("Taken By: " + photo.getAuthor());
         desc.setText(photo.getDescription());
+        fav.setChecked(photo.isFavorite());
         controller = MainActivity.getController();
         fav.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +54,7 @@ public class SinglePhotoActivity extends AppCompatActivity {
     }
     public void onToggleStar(){
         photo.toggleFavorite();
-        photoModel.updatePhoto(photo);
+        photoModel.updatePhoto(photo);  //NEED UPDATE MODEL NOT DS
         if(photo.isFavorite()){
             photoModel.addPhoto(photo);
         }

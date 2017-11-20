@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity
                 viewGallery();
                 break;
             case R.id.nav_slideshow:
-
+                dispatchSlideshowIntent();
                 break;
             //case R.id.nav_manage:
                // break;
@@ -159,6 +159,12 @@ public class MainActivity extends AppCompatActivity
     public void displayFullScreenImage(Photo photo) {
         Intent intent = new Intent(getBaseContext(), SinglePhotoActivity.class);
         intent.putExtra(Constants.getPhotoExtraTag(), photo);
+        startActivity(intent);
+    }
+
+    public void dispatchSlideshowIntent() {
+        Intent intent = new Intent(getBaseContext(), SlideshowActivity.class);
+        intent.putExtra(Constants.PHOTOARRAY_EXTRA_TAG, photos);
         startActivity(intent);
     }
     public void viewSaved(){
