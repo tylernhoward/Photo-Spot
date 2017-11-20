@@ -14,6 +14,7 @@ public class Photo implements Serializable {
     private String imageURL;
     private String _id;
     private boolean isVisible;
+    private boolean isFavorite;
 
 
     public Photo(String title, String description, String imageUrl, String author) {
@@ -23,6 +24,7 @@ public class Photo implements Serializable {
         this.author = author;
         this._id = UUID.randomUUID().toString();
         this.isVisible = true;
+        this.isFavorite = false;
     }
 
     public Photo(){
@@ -32,6 +34,8 @@ public class Photo implements Serializable {
         this.author = "";
         this._id = UUID.randomUUID().toString();
         this.isVisible = true;
+        this.isFavorite = false;
+
     }
     public boolean isVisible() {
         return isVisible;
@@ -39,6 +43,13 @@ public class Photo implements Serializable {
 
     public void setVisible(boolean visible) {
         isVisible = visible;
+    }
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void toggleFavorite() {
+        isFavorite = !isFavorite;
     }
 
     public String getId() {return _id;}

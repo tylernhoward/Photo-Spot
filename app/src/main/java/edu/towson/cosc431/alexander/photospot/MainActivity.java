@@ -26,12 +26,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import edu.towson.cosc431.alexander.photospot.adapters.PhotosAdapter;
+import edu.towson.cosc431.alexander.photospot.database.PhotoDataSource;
+import edu.towson.cosc431.alexander.photospot.interfaces.IModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IController {
 
     private ArrayList<Photo> photos;
+    private ArrayList<Photo> tempHolder;
     private FloatingActionButton fab;
     private DrawerLayout drawer;
     private Toolbar toolbar;
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity
     private Photo photo;
     private String currentPhotoPath;
     private static IController controller;
+    private IModel photoModel = new PhotoModel(PhotoDataSource.getInstance(this));
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +84,12 @@ public class MainActivity extends AppCompatActivity
 
     private void buildPhotos() {
         photos = new ArrayList<>();
+        tempHolder = new ArrayList<>();
         photos.add(new Photo("Towson U", "Test Description", "https://www.towson.edu/careercenter/images/stephens-exterior-01-m.jpg", "Unknown"));
         photos.add(new Photo("Towson University", "Test Description 2", "https://i.ytimg.com/vi/1q8WD3MZ8qc/maxresdefault.jpg", "Unknown"));
         photos.add(new Photo("Towson", "Towson description", "http://1.bp.blogspot.com/-Q7pZJOtG7og/VOexnE53nNI/AAAAAAAAVz8/kRG7F86_D6c/s1600/201_1Towson_Mall_new_edition.jpg", "Unknown"));
         photos.add(new Photo("Towson MD", "Towson is okay I guess", "https://i.ytimg.com/vi/ep_Zdwhza_o/maxresdefault.jpg", "Unknown"));
+        tempHolder.addAll(photos);
     }
 
     @Override
@@ -124,15 +131,17 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_camera:
                 dispatchTakePictureIntent();
                 break;
+            case R.id.nav_saved:
+                viewSaved();
+                break;
             case R.id.nav_gallery:
-
+                viewGallery();
                 break;
             case R.id.nav_slideshow:
 
                 break;
-            case R.id.nav_manage:
-
-                break;
+            //case R.id.nav_manage:
+               // break;
             case R.id.nav_share:
 
                 break;
@@ -152,10 +161,26 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(Constants.getPhotoExtraTag(), photo);
         startActivity(intent);
     }
+    public void viewSaved(){
+        photos.clear();
+        photos.addAll(photoModel.getPhotos());
+        refresh();
+    }
+    public void viewGallery(){
+        photos.clear();
+        photos.addAll(tempHolder);
+        refresh();
+    }
 
     @Override
     public void addPhoto(Photo photo) {
         photos.add(photo);
+    }
+
+    @Override
+    public void updatePhoto(Photo photo) {
+
+        //THIS NEEDS TO UPDATE THE STATUS OF THE SONG (Necessary for favorites)
     }
 
     @Override
