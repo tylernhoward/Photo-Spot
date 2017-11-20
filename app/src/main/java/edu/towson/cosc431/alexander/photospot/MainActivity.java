@@ -35,12 +35,15 @@ import java.util.Date;
 import java.util.List;
 
 import edu.towson.cosc431.alexander.photospot.adapters.PhotosAdapter;
+import edu.towson.cosc431.alexander.photospot.database.PhotoDataSource;
+import edu.towson.cosc431.alexander.photospot.interfaces.IModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IController, ASyncResponse {
 
     private ArrayList<Photo> photos;
+    private ArrayList<Photo> tempHolder;
     private FloatingActionButton fab;
     private DrawerLayout drawer;
     private Toolbar toolbar;
@@ -51,9 +54,7 @@ public class MainActivity extends AppCompatActivity
     private Photo photo;
     private String currentPhotoPath;
     private static IController controller;
-    private ArrayList<Photo> temp;
-    private Handler handler;
-    private FlickrFetcher flickr;
+    private IModel photoModel = new PhotoModel(PhotoDataSource.getInstance(this));
 
 
     @Override
@@ -126,15 +127,17 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_camera:
                 dispatchTakePictureIntent();
                 break;
+            case R.id.nav_saved:
+                viewSaved();
+                break;
             case R.id.nav_gallery:
-
+                viewGallery();
                 break;
             case R.id.nav_slideshow:
 
                 break;
-            case R.id.nav_manage:
-
-                break;
+            //case R.id.nav_manage:
+               // break;
             case R.id.nav_share:
 
                 break;
@@ -154,10 +157,26 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(Constants.getPhotoExtraTag(), photo);
         startActivity(intent);
     }
+    public void viewSaved(){
+        photos.clear();
+        photos.addAll(photoModel.getPhotos());
+        refresh();
+    }
+    public void viewGallery(){
+        photos.clear();
+        photos.addAll(tempHolder);
+        refresh();
+    }
 
     @Override
     public void addPhoto(Photo photo) {
         photos.add(photo);
+    }
+
+    @Override
+    public void updatePhoto(Photo photo) {
+
+        //THIS NEEDS TO UPDATE THE STATUS OF THE SONG (Necessary for favorites)
     }
 
     @Override

@@ -2,11 +2,15 @@ package edu.towson.cosc431.alexander.photospot;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import edu.towson.cosc431.alexander.photospot.database.PhotoDataSource;
+import edu.towson.cosc431.alexander.photospot.interfaces.IModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 
 /**
@@ -16,7 +20,11 @@ import edu.towson.cosc431.alexander.photospot.models.Photo;
 public class SinglePhotoActivity extends AppCompatActivity {
     private ImageView imageView;
     private TextView title, author, desc;
+    private ImageButton fav;
     private Photo photo;
+    private IModel photoModel = new PhotoModel(PhotoDataSource.getInstance(this));
+    private IController controller;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,9 +38,27 @@ public class SinglePhotoActivity extends AppCompatActivity {
         desc = (TextView) findViewById(R.id.photo_description);
         author = (TextView) findViewById(R.id.photo_author);
         imageView = (ImageView) findViewById(R.id.big_image_view);
+        fav = (ImageButton)findViewById(R.id.favoriteBtn);
         title.setText(photo.getTitle());
         author.setText("Taken By: " + photo.getAuthor());
         desc.setText(photo.getDescription());
+        controller = MainActivity.getController();
+        fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onToggleStar();
+            }});
         Picasso.with(this).load(photo.getImageURL()).fit().into(imageView);
+    }
+    public void onToggleStar(){
+        photo.toggleFavorite();
+        photoModel.updatePhoto(photo);
+        if(photo.isFavorite()){
+            photoModel.addPhoto(photo);
+        }
+        else{
+            photoModel.removePhoto(photo);
+        }
+        controller.refresh();
     }
 }

@@ -9,5 +9,6 @@ import edu.towson.cosc431.alexander.photospot.models.Photo;
 public interface IController {
     void displayFullScreenImage(Photo photo);
     void addPhoto(Photo photo);
+    void updatePhoto(Photo photo);
     void refresh();
 }
