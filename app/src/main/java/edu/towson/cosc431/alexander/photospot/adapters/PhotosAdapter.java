@@ -48,8 +48,11 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
     @Override
     public void onBindViewHolder(PhotoViewHolder holder, int position) {
         photo = photosList.get(position);
-        this.holder = holder;
-        holder.bindTodo(photo);
+        //THIS NEEDS TO GO AWAY
+       // if(photo.isVisible()) {
+            this.holder = holder;
+            holder.bindTodo(photo);
+       // }
     }
 
     @Override

@@ -33,6 +33,9 @@ public class PhotoDataSource implements IDataSource {
         cv.put(DatabaseContract.DESCRIPTION_COLUMN_NAME, photo.getDescription());
         cv.put(DatabaseContract.IMAGEURL_COLUMN_NAME, photo.getImageURL());
         cv.put(DatabaseContract.VISIBLE_COLUMN_NAME, photo.isVisible());
+        cv.put(DatabaseContract.FAVORITE_COLUMN_NAME, photo.isFavorite());
+
+
         return cv;
     }
 
@@ -50,7 +53,9 @@ public class PhotoDataSource implements IDataSource {
             String description = cursor.getString(cursor.getColumnIndex(DatabaseContract.DESCRIPTION_COLUMN_NAME));
             String imageURL = cursor.getString(cursor.getColumnIndex(DatabaseContract.IMAGEURL_COLUMN_NAME));
             boolean isVisible = cursor.getInt(cursor.getColumnIndex(DatabaseContract.VISIBLE_COLUMN_NAME)) == 1;
+            boolean isFavorite = cursor.getInt(cursor.getColumnIndex(DatabaseContract.FAVORITE_COLUMN_NAME)) == 1;
 
+            photo.setFavorite(isFavorite);
             photo.setId(id);
             photo.setTitle(title);
             photo.setAuthor(author);
@@ -87,7 +92,9 @@ public class PhotoDataSource implements IDataSource {
         String description = cursor.getString(cursor.getColumnIndex(DatabaseContract.DESCRIPTION_COLUMN_NAME));
         String imageURL = cursor.getString(cursor.getColumnIndex(DatabaseContract.IMAGEURL_COLUMN_NAME));
         boolean isVisible = cursor.getInt(cursor.getColumnIndex(DatabaseContract.VISIBLE_COLUMN_NAME)) == 1;
+        boolean isFavorite = cursor.getInt(cursor.getColumnIndex(DatabaseContract.FAVORITE_COLUMN_NAME)) == 1;
 
+        photo.setFavorite(isFavorite);
         photo.setId(id);
         photo.setTitle(title);
         photo.setAuthor(author);

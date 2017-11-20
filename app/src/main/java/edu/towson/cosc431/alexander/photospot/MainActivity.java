@@ -1,8 +1,14 @@
 package edu.towson.cosc431.alexander.photospot;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,9 +44,13 @@ import edu.towson.cosc431.alexander.photospot.adapters.PhotosAdapter;
 import edu.towson.cosc431.alexander.photospot.database.PhotoDataSource;
 import edu.towson.cosc431.alexander.photospot.interfaces.IModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, IController, ASyncResponse {
+        implements LocationListener, EasyPermissions.PermissionCallbacks, NavigationView.OnNavigationItemSelectedListener, IController, ASyncResponse {
+
+    private static final int RC_LOCATION = 124;
 
     private ArrayList<Photo> photos;
     private ArrayList<Photo> tempHolder;
@@ -52,18 +62,25 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     private RecyclerView recyclerView;
     private Photo photo;
+    private Location location;
     private String currentPhotoPath;
     private static IController controller;
     private IModel photoModel = new PhotoModel(PhotoDataSource.getInstance(this));
 
 
+    protected LocationManager locationManager;
+    protected LocationListener locationListener;
+    protected boolean gps_enabled,network_enabled;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        askForPermission();
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         photos = new ArrayList<Photo>();
+        tempHolder = new ArrayList<Photo>();
         controller = this;
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -71,11 +88,11 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 //                Snackbar.make(view, "TODO: Take / Upload Photo", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-                dispatchTakePictureIntent();
+               dispatchTakePictureIntent();
             }
         });
-    drawer =(DrawerLayout) findViewById(R.id.drawer_layout);
-    toggle =new ActionBarDrawerToggle(this,drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+         drawer =(DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle =new ActionBarDrawerToggle(this,drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView =(NavigationView) findViewById(R.id.nav_view);
@@ -84,9 +101,63 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new PhotosAdapter(photos, this);
         recyclerView.setAdapter(adapter);
-    adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+        Log.d("INITIAL LOCATION", location.getLatitude() + " " + location.getLongitude());
 
-}
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+    @AfterPermissionGranted(RC_LOCATION)
+    private void askForPermission() {
+        String[] perms = { Manifest.permission.ACCESS_FINE_LOCATION};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Log.d("permissions", "Granted");
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.camera_and_location_rationale), RC_LOCATION, perms);
+            Log.d("permissions", "Requested");
+
+        }
+    }
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        Log.d("permissions", "onPermissionsGranted:" + requestCode + ":" + perms.size());
+    }
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        Log.d("permissions", "onPermissionsDenied:" + requestCode + ":" + perms.size());
+    }
+    @Override
+    public void onLocationChanged(Location loc) {
+        location = loc;
+        Log.d("Output","Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
+    }
+    @Override
+    public void onProviderDisabled(String provider) {
+        Log.d("Provider","disable");
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        Log.d("Provider","enable");
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        Log.d("Status","status");
+    }
+
+
+
+
+
 
     @Override
     public void onBackPressed() {
@@ -128,10 +199,10 @@ public class MainActivity extends AppCompatActivity
                 dispatchTakePictureIntent();
                 break;
             case R.id.nav_saved:
-                viewSaved();
+                //viewSaved();
                 break;
             case R.id.nav_gallery:
-                viewGallery();
+                //viewGallery();
                 break;
             case R.id.nav_slideshow:
                 dispatchSlideshowIntent();
@@ -163,7 +234,7 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(Constants.PHOTOARRAY_EXTRA_TAG, photos);
         startActivity(intent);
     }
-    public void viewSaved(){
+    /*public void viewSaved(){
         photos.clear();
         photos.addAll(photoModel.getPhotos());
         refresh();
@@ -171,8 +242,9 @@ public class MainActivity extends AppCompatActivity
     public void viewGallery(){
         photos.clear();
         photos.addAll(tempHolder);
+        //MAKE THIS FRAGMENT SO CAN PUSH OFF BACKSTACK
         refresh();
-    }
+    }*/
 
     @Override
     public void addPhoto(Photo photo) {
@@ -180,9 +252,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void updatePhoto(Photo photo) {
-
-        //THIS NEEDS TO UPDATE THE STATUS OF THE SONG (Necessary for favorites)
+    public void updatePhoto(Photo input) {
+        Photo photoToUpdate = new Photo();
+        for(Photo p : photos) {
+            if(p.getId().equals(input.getId())){
+                photoToUpdate = p;
+            }
+        }
+        photos.set(0,photoToUpdate);
     }
 
     @Override

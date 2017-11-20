@@ -54,7 +54,7 @@ public class SinglePhotoActivity extends AppCompatActivity {
     }
     public void onToggleStar(){
         photo.toggleFavorite();
-        photoModel.updatePhoto(photo);  //NEED UPDATE MODEL NOT DS
+        controller.updatePhoto(photo);  //NEED UPDATE MODEL NOT DS
         if(photo.isFavorite()){
             photoModel.addPhoto(photo);
         }

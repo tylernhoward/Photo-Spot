@@ -47,6 +47,10 @@ public class Photo implements Serializable {
     public boolean isFavorite() {
         return isFavorite;
     }
+    public void setFavorite(boolean fav) {
+        isFavorite = fav;
+    }
+
 
     public void toggleFavorite() {
         isFavorite = !isFavorite;

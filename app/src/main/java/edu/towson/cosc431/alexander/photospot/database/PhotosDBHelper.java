@@ -16,7 +16,8 @@ public class PhotosDBHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE = "CREATE TABLE " + DatabaseContract.TABLE_NAME + "("
             + DatabaseContract._ID +" text , " + DatabaseContract.TITLE_COLUMN_NAME + " text,"
             + DatabaseContract.AUTHOR_COLUMN_NAME +" text,"+ DatabaseContract.DESCRIPTION_COLUMN_NAME +" text,"
-            + DatabaseContract.IMAGEURL_COLUMN_NAME +" text," + DatabaseContract.VISIBLE_COLUMN_NAME +" integer);";
+            + DatabaseContract.IMAGEURL_COLUMN_NAME +" text," + DatabaseContract.VISIBLE_COLUMN_NAME +" integer, "
+            + DatabaseContract.FAVORITE_COLUMN_NAME +" integer);";
     public PhotosDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DB_VERSION);
     }

@@ -14,7 +14,5 @@ public class DatabaseContract implements BaseColumns {
     public static final String DESCRIPTION_COLUMN_NAME = "description";
     public static final String IMAGEURL_COLUMN_NAME = "image_url";
     public static final String VISIBLE_COLUMN_NAME = "is_visible";
-
-
-
+    public static final String FAVORITE_COLUMN_NAME = "is_favorite";
 }
