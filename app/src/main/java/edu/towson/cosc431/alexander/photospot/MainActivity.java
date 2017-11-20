@@ -1,12 +1,18 @@
 package edu.towson.cosc431.alexander.photospot;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,15 +21,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import edu.towson.cosc431.alexander.photospot.adapters.PhotosAdapter;
 import edu.towson.cosc431.alexander.photospot.database.PhotoDataSource;
@@ -31,7 +40,7 @@ import edu.towson.cosc431.alexander.photospot.interfaces.IModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, IController {
+        implements NavigationView.OnNavigationItemSelectedListener, IController, ASyncResponse {
 
     private ArrayList<Photo> photos;
     private ArrayList<Photo> tempHolder;
@@ -54,9 +63,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        buildPhotos();
+        photos = new ArrayList<Photo>();
         controller = this;
-
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,31 +74,19 @@ public class MainActivity extends AppCompatActivity
                 dispatchTakePictureIntent();
             }
         });
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+    drawer =(DrawerLayout) findViewById(R.id.drawer_layout);
+    toggle =new ActionBarDrawerToggle(this,drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView =(NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView =(RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new PhotosAdapter(photos, this);
         recyclerView.setAdapter(adapter);
-    }
+    adapter.notifyDataSetChanged();
 
-    private void buildPhotos() {
-        photos = new ArrayList<>();
-        tempHolder = new ArrayList<>();
-        photos.add(new Photo("Towson U", "Test Description", "https://www.towson.edu/careercenter/images/stephens-exterior-01-m.jpg", "Unknown"));
-        photos.add(new Photo("Towson University", "Test Description 2", "https://i.ytimg.com/vi/1q8WD3MZ8qc/maxresdefault.jpg", "Unknown"));
-        photos.add(new Photo("Towson", "Towson description", "http://1.bp.blogspot.com/-Q7pZJOtG7og/VOexnE53nNI/AAAAAAAAVz8/kRG7F86_D6c/s1600/201_1Towson_Mall_new_edition.jpg", "Unknown"));
-        photos.add(new Photo("Towson MD", "Towson is okay I guess", "https://i.ytimg.com/vi/ep_Zdwhza_o/maxresdefault.jpg", "Unknown"));
-        tempHolder.addAll(photos);
-    }
+}
 
     @Override
     public void onBackPressed() {
@@ -242,5 +238,14 @@ public class MainActivity extends AppCompatActivity
 
     public void refresh() {
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void retrieveList(ArrayList<Photo> list) {
+        photos.clear();
+        for(int i =0; i<list.size(); i++)
+        {
+            photos.add(list.get(i));
+        }
     }
 }

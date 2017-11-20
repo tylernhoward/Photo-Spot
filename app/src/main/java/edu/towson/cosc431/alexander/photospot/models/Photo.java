@@ -52,6 +52,10 @@ public class Photo implements Serializable {
         isFavorite = !isFavorite;
     }
 
+    public Photo(String imageUrl)
+    {
+        this.imageURL = imageUrl;
+    }
     public String getId() {return _id;}
 
     public void setId(String _id) {this._id = _id;}
