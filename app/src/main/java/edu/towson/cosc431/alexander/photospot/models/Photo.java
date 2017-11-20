@@ -19,6 +19,11 @@ public class Photo implements Serializable {
         this.author = author;
     }
 
+    public Photo(String imageUrl)
+    {
+        imageURL = imageUrl;
+    }
+
     public String getImageURL() {
         return imageURL;
     }
