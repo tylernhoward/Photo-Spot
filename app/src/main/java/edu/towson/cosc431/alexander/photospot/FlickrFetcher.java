@@ -80,12 +80,21 @@ public class FlickrFetcher {
         return downloadGalleryItems(url);
     }
 
-    public ArrayList<Photo> search(String city/*, int page*/) {
+    public ArrayList<Photo> search(String city, String state/*, int page*/) {
         String url = Uri.parse(ENDPOINT).buildUpon()
                 .appendQueryParameter("method", METHOD_SEARCH)
                 .appendQueryParameter("api_key", API_KEY)
-                .appendQueryParameter("tags", city+", building, Maryland")
-                .appendQueryParameter("sort", "relevance")
+                //.appendQueryParameter("lon", "-76")
+                //.appendQueryParameter("lat", "39")
+                //.appendQueryParameter("radius", "15")
+                //.appendQueryParameter("radius_units", "Miles")
+                .appendQueryParameter("extras", "owner_name, description")
+                .appendQueryParameter("tags", "Building, landmark, Forest, Creek, Lake, River, Statue, Monument, Architecture, Courthouse, Building Complex, Landscape, Skyline")
+                .appendQueryParameter("text", city+" "+state)
+                .appendQueryParameter("tag_mode", "any")
+                .appendQueryParameter("safe_search", "1")
+                //.appendQueryParameter("tags", city+", Maryland")
+                .appendQueryParameter("sort", "interestingness-desc")
                 .build().toString();
         url+="/";
         return downloadGalleryItems(url);

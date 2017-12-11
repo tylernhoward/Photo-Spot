@@ -111,7 +111,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return flickr.search("Towson");
+            return flickr.search("Towson", "Maryland");
         }
     }
 }
