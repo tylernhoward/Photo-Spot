@@ -306,14 +306,9 @@ public class MainActivity extends AppCompatActivity
 
             requestPermissions(new String[]{Manifest.permission.CAMERA},
                     Constants.REQUEST_CAMERA_PERMISSIONS);
+        } else {
+            dispatchTakePictureIntent();
         }
-
-        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    Constants.REQUEST_WRITE_STORAGE);
-        }
-
-        dispatchTakePictureIntent();
     }
 
     private File createImageFile() throws IOException {
