@@ -5,6 +5,7 @@ package edu.towson.cosc431.alexander.photospot.adapters;
  */
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -81,7 +82,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
     {
         ASyncResponse temp = null;
         FlickrFetcher flickr = new FlickrFetcher();
-        Activity activity;
 
         @Override
         protected void onPreExecute()

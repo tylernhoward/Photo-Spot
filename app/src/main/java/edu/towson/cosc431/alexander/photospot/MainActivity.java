@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+
     }
 
     @Override
@@ -204,12 +205,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             //case R.id.nav_manage:
                // break;
-            case R.id.nav_share:
-
-                break;
-            case R.id.nav_send:
-
-                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

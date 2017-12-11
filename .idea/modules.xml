@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://C:\Users\pkmna\AndroidStudioProjects\PhotoSpot\photo-spot.iml" filepath="C:\Users\pkmna\AndroidStudioProjects\PhotoSpot\photo-spot.iml" />
       <module fileurl="file://$PROJECT_DIR$/PhotoSpot.iml" filepath="$PROJECT_DIR$/PhotoSpot.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/photo-spot.iml" filepath="$PROJECT_DIR$/photo-spot.iml" />

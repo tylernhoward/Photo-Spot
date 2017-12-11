@@ -23,7 +23,6 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
 
     public PhotoViewHolder(View itemView, final IController controller) {
         super(itemView);
-
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
