@@ -7,6 +7,8 @@ package edu.towson.cosc431.alexander.photospot;
 public class Constants {
     private static final String PHOTO_EXTRA_TAG = "PHOTO";
     public static final String PHOTOARRAY_EXTRA_TAG = "PHOTO_ARRAY";
+    public static final int REQUEST_CAMERA_PERMISSIONS = 117;
+    public static final int REQUEST_WRITE_STORAGE = 118;
 
     private static final String CAPTURED_PHOTO_TAG = "CAP_PHOTO";
     private static final int REQUEST_IMAGE_CAPTURE = 1;

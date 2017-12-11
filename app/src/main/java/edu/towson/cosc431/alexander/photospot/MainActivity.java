@@ -11,11 +11,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.AsyncTaskLoader;
@@ -86,11 +89,12 @@ public class MainActivity extends AppCompatActivity
         controller = this;
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
 //                Snackbar.make(view, "TODO: Take / Upload Photo", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-               dispatchTakePictureIntent();
+               checkCameraPermissions();
             }
         });
          drawer =(DrawerLayout) findViewById(R.id.drawer_layout);
@@ -192,25 +196,24 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         switch (id) {
             case R.id.nav_camera:
-                dispatchTakePictureIntent();
+                checkCameraPermissions();
                 break;
             case R.id.nav_saved:
-                //viewSaved();
+                viewSaved();
                 break;
             case R.id.nav_gallery:
-                //viewGallery();
+                viewGallery();
                 break;
             case R.id.nav_slideshow:
                 dispatchSlideshowIntent();
                 break;
-            //case R.id.nav_manage:
-               // break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -230,7 +233,7 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(Constants.PHOTOARRAY_EXTRA_TAG, photos);
         startActivity(intent);
     }
-    /*public void viewSaved(){
+    public void viewSaved(){
         photos.clear();
         photos.addAll(photoModel.getPhotos());
         refresh();
@@ -240,7 +243,7 @@ public class MainActivity extends AppCompatActivity
         photos.addAll(tempHolder);
         //MAKE THIS FRAGMENT SO CAN PUSH OFF BACKSTACK
         refresh();
-    }*/
+    }
 
     @Override
     public void addPhoto(Photo photo) {
@@ -287,6 +290,23 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(takePictureIntent, Constants.getRequestImageCapture());
             }
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void checkCameraPermissions() {
+        if (checkSelfPermission(Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(new String[]{Manifest.permission.CAMERA},
+                    Constants.REQUEST_CAMERA_PERMISSIONS);
+        }
+
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    Constants.REQUEST_WRITE_STORAGE);
+        }
+
+        dispatchTakePictureIntent();
     }
 
     private File createImageFile() throws IOException {
