@@ -12,7 +12,6 @@ import java.util.TimerTask;
 
 import edu.towson.cosc431.alexander.photospot.adapters.SlideAdapter;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
-import me.relex.circleindicator.CircleIndicator;
 
 public class SlideshowActivity extends AppCompatActivity {
 
@@ -35,8 +34,6 @@ public class SlideshowActivity extends AppCompatActivity {
         mPager = (ViewPager)findViewById(R.id.pager);
 
         mPager.setAdapter(new SlideAdapter(SlideshowActivity.this,slideArray));
-        CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
-        indicator.setViewPager(mPager);
 
         // Auto start of viewpager
         final Handler handler = new Handler();
