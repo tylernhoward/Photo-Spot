@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity
         adapter = new PhotosAdapter(photos, this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        Log.d("INITIAL LOCATION", location.getLatitude() + " " + location.getLongitude());
+//        Log.d("INITIAL LOCATION", location.getLatitude() + " " + location.getLongitude());
 
     }
 
@@ -209,12 +209,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             //case R.id.nav_manage:
                // break;
-            case R.id.nav_share:
-
-                break;
-            case R.id.nav_send:
-
-                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -1,8 +1,10 @@
 package edu.towson.cosc431.alexander.photospot;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,6 +23,7 @@ import edu.towson.cosc431.alexander.photospot.models.Photo;
 public class SinglePhotoActivity extends AppCompatActivity {
     private ImageView imageView;
     private TextView title, author, desc;
+    private Button shareBtn;
     private CheckBox fav;
     private Photo photo;
     private IModel photoModel = new PhotoModel(PhotoDataSource.getInstance(this));
@@ -40,6 +43,13 @@ public class SinglePhotoActivity extends AppCompatActivity {
         author = (TextView) findViewById(R.id.photo_author);
         imageView = (ImageView) findViewById(R.id.big_image_view);
         fav = (CheckBox)findViewById(R.id.favoriteBtn);
+        shareBtn = (Button) findViewById(R.id.shareBtn);
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchShareIntent(photo);
+            }
+        });
         title.setText(photo.getTitle());
         author.setText("Taken By: " + photo.getAuthor());
         desc.setText(photo.getDescription());
@@ -62,5 +72,13 @@ public class SinglePhotoActivity extends AppCompatActivity {
             photoModel.removePhoto(photo);
         }
         controller.refresh();
+    }
+
+    public void dispatchShareIntent(Photo photo) {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, photo.getTitle());
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, photo.getTitle() + " " + photo.getImageURL());
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 }

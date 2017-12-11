@@ -10,6 +10,7 @@
     <string name="author">Author</string>
     <string name="description">Description</string>
     <string name="save">Save</string>
+    <string name="share">Share</string>
     <string name="camera_and_location_rationale">This app needs access to your camera so you can take pictures and your location to view nearby.</string>
 
 </resources>

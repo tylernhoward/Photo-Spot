@@ -15,6 +15,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.util.Log;
+import android.widget.Toast;
 
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 
