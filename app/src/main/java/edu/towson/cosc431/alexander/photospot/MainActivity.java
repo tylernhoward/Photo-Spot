@@ -146,7 +146,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location loc) {
         location = loc;
-        Log.d("Output","Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
     }
     @Override
     public void onProviderDisabled(String provider) {
@@ -317,6 +316,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void refresh() {
+
         adapter.notifyDataSetChanged();
     }
 
