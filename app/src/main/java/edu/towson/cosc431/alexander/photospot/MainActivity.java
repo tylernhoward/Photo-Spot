@@ -45,6 +45,7 @@ import edu.towson.cosc431.alexander.photospot.database.PhotoDataSource;
 import edu.towson.cosc431.alexander.photospot.interfaces.ASyncResponse;
 import edu.towson.cosc431.alexander.photospot.interfaces.IController;
 import edu.towson.cosc431.alexander.photospot.interfaces.IModel;
+import edu.towson.cosc431.alexander.photospot.models.LocationModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -121,6 +122,9 @@ public class MainActivity extends AppCompatActivity
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            LocationModel locationModel = new LocationModel().getInstance();
+            locationModel.setLatitude(location.getLatitude());
+            locationModel.setLongitude(location.getLongitude());
             Log.d("permissions", "Granted");
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.camera_and_location_rationale), RC_LOCATION, perms);
@@ -201,10 +205,10 @@ public class MainActivity extends AppCompatActivity
                 dispatchTakePictureIntent();
                 break;
             case R.id.nav_saved:
-                //viewSaved();
+                viewSaved();
                 break;
             case R.id.nav_gallery:
-                //viewGallery();
+                viewGallery();
                 break;
             case R.id.nav_slideshow:
                 dispatchSlideshowIntent();
@@ -230,7 +234,8 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(Constants.PHOTOARRAY_EXTRA_TAG, photos);
         startActivity(intent);
     }
-    /*public void viewSaved(){
+    public void viewSaved() {
+        tempHolder.addAll(photos);
         photos.clear();
         photos.addAll(photoModel.getPhotos());
         refresh();
@@ -238,9 +243,8 @@ public class MainActivity extends AppCompatActivity
     public void viewGallery(){
         photos.clear();
         photos.addAll(tempHolder);
-        //MAKE THIS FRAGMENT SO CAN PUSH OFF BACKSTACK
         refresh();
-    }*/
+    }
 
     @Override
     public void addPhoto(Photo photo) {

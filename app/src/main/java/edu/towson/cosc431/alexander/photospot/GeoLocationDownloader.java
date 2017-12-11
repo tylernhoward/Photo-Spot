@@ -1,5 +1,7 @@
 package edu.towson.cosc431.alexander.photospot;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,15 +16,18 @@ import java.net.URL;
  */
 
 public class GeoLocationDownloader {
-        static String API = "https://maps.googleapis.com/maps/api/geocode/json?";
-        static String Coords ="latlng=";
-        static String Key = "&key=AIzaSyCych-jrfZ2bkGMyQbKcq6Yl6S6bNPHStI";
+        static String API = "http://locationiq.org/v1/reverse.php?format=json";
+        static String Lat ="&lat=";
+        static String Long = "&lon=";
+        static String Key = "&key=96254c5f4eb1f1";
 
         public static String downloadJson(double latitude, double longitude) {
             URL url = null;
             try {
-                Coords = Coords + String.valueOf(latitude)+","+String.valueOf(longitude);
-                url = new URL(API + Coords + Key);
+                Lat= Lat + String.valueOf(latitude);
+                Long = Long + String.valueOf(longitude);
+                url = new URL(API + Key + Lat + Long);
+                Log.d("__________",url.toString());
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                 connection.setRequestMethod("GET");
                 InputStream stream = connection.getInputStream();
