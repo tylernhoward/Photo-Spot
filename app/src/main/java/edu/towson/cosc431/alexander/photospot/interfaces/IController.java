@@ -11,4 +11,5 @@ public interface IController {
     void addPhoto(Photo photo);
     void updatePhoto(Photo photo);
     void refresh();
+    void refreshAdapter();
 }

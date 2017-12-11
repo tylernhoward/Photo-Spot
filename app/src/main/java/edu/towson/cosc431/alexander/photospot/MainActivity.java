@@ -72,12 +72,11 @@ public class MainActivity extends AppCompatActivity
     private String currentPhotoPath;
     private static IController controller;
     private IModel photoModel = new PhotoModel(PhotoDataSource.getInstance(this));
-
-
     protected LocationManager locationManager;
     protected LocationListener locationListener;
     protected boolean gps_enabled,network_enabled;
 
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity
         adapter = new PhotosAdapter(photos, this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
+        //startService(new Intent(getBaseContext(), TimerService.class));
 
     }
 
@@ -166,11 +165,7 @@ public class MainActivity extends AppCompatActivity
         Log.d("Status","status");
     }
 
-
-
-
-
-
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     @Override
     public void onBackPressed() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -277,6 +272,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.FROYO)
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -311,6 +307,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.FROYO)
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -343,5 +340,11 @@ public class MainActivity extends AppCompatActivity
         {
             photos.add(list.get(i));
         }
+    }
+
+    @Override
+    public void refreshAdapter()
+    {
+        adapter.updateList();
     }
 }
