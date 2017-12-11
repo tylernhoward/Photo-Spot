@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import edu.towson.cosc431.alexander.photospot.database.PhotoDataSource;
+import edu.towson.cosc431.alexander.photospot.interfaces.IController;
 import edu.towson.cosc431.alexander.photospot.interfaces.IModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 

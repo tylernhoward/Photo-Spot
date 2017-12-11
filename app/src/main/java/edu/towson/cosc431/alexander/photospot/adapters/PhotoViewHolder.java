@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import edu.towson.cosc431.alexander.photospot.IController;
+import edu.towson.cosc431.alexander.photospot.interfaces.IController;
 import edu.towson.cosc431.alexander.photospot.R;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 
@@ -37,7 +37,6 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
                 controller.displayFullScreenImage(photo);
             }
         });
-
         photoTitle = (TextView) itemView.findViewById(R.id.photoTitle);
         photoDescription = (TextView) itemView.findViewById(R.id.photoDescription);
         imageView = (ImageView) itemView.findViewById(R.id.imageView);

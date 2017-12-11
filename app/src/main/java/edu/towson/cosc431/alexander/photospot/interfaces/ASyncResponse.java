@@ -1,4 +1,4 @@
-package edu.towson.cosc431.alexander.photospot;
+package edu.towson.cosc431.alexander.photospot.interfaces;
 
 import java.util.ArrayList;
 

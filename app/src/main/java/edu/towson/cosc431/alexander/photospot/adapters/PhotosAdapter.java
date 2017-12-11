@@ -11,15 +11,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import edu.towson.cosc431.alexander.photospot.ASyncResponse;
+import edu.towson.cosc431.alexander.photospot.GeoLocationDownloader;
+import edu.towson.cosc431.alexander.photospot.interfaces.ASyncResponse;
 import edu.towson.cosc431.alexander.photospot.FlickrFetcher;
-import edu.towson.cosc431.alexander.photospot.IController;
+import edu.towson.cosc431.alexander.photospot.interfaces.IController;
 import edu.towson.cosc431.alexander.photospot.R;
+import edu.towson.cosc431.alexander.photospot.models.LocationModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
@@ -96,6 +100,17 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
 
         @Override
         protected ArrayList<Photo> doInBackground(Void... params) {
+            LocationModel location = new LocationModel().getInstance();
+            String json = GeoLocationDownloader.downloadJson(location.getLatitude(),location.getLongitude());
+
+            try {
+                JSONObject object = new JSONObject(json);
+                JSONArray array = object.getJSONArray("results");
+                JSONObject results = array.getJSONObject(0);
+                String address = results.getString("formatted_address");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return flickr.search("Towson");
         }
     }

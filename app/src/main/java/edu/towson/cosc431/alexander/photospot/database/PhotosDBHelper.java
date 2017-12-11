@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import edu.towson.cosc431.alexander.photospot.interfaces.IDataSource;
+
 /**
  * Created by tylerhoward on 10/30/17.
  */

@@ -2,7 +2,7 @@ package edu.towson.cosc431.alexander.photospot;
 
 import java.util.ArrayList;
 
-import edu.towson.cosc431.alexander.photospot.database.IDataSource;
+import edu.towson.cosc431.alexander.photospot.interfaces.IDataSource;
 import edu.towson.cosc431.alexander.photospot.interfaces.IModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 

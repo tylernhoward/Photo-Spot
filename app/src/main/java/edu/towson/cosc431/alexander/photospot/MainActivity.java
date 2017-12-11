@@ -1,24 +1,17 @@
 package edu.towson.cosc431.alexander.photospot;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,7 +24,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +34,10 @@ import java.util.List;
 
 import edu.towson.cosc431.alexander.photospot.adapters.PhotosAdapter;
 import edu.towson.cosc431.alexander.photospot.database.PhotoDataSource;
+import edu.towson.cosc431.alexander.photospot.interfaces.ASyncResponse;
+import edu.towson.cosc431.alexander.photospot.interfaces.IController;
 import edu.towson.cosc431.alexander.photospot.interfaces.IModel;
+import edu.towson.cosc431.alexander.photospot.models.LocationModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -102,7 +97,6 @@ public class MainActivity extends AppCompatActivity
         adapter = new PhotosAdapter(photos, this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        Log.d("INITIAL LOCATION", location.getLatitude() + " " + location.getLongitude());
 
     }
 
@@ -119,6 +113,9 @@ public class MainActivity extends AppCompatActivity
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            LocationModel locationModel = new LocationModel().getInstance();
+            locationModel.setLatitude(location.getLatitude());
+            locationModel.setLongitude(location.getLongitude());
             Log.d("permissions", "Granted");
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.camera_and_location_rationale), RC_LOCATION, perms);
@@ -143,12 +140,10 @@ public class MainActivity extends AppCompatActivity
     public void onProviderDisabled(String provider) {
         Log.d("Provider","disable");
     }
-
     @Override
     public void onProviderEnabled(String provider) {
         Log.d("Provider","enable");
     }
-
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         Log.d("Status","status");
@@ -199,10 +194,10 @@ public class MainActivity extends AppCompatActivity
                 dispatchTakePictureIntent();
                 break;
             case R.id.nav_saved:
-                //viewSaved();
+                viewSaved();
                 break;
             case R.id.nav_gallery:
-                //viewGallery();
+                viewGallery();
                 break;
             case R.id.nav_slideshow:
                 dispatchSlideshowIntent();
@@ -234,7 +229,8 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(Constants.PHOTOARRAY_EXTRA_TAG, photos);
         startActivity(intent);
     }
-    /*public void viewSaved(){
+    public void viewSaved(){
+        tempHolder.addAll(photos);
         photos.clear();
         photos.addAll(photoModel.getPhotos());
         refresh();
@@ -242,9 +238,8 @@ public class MainActivity extends AppCompatActivity
     public void viewGallery(){
         photos.clear();
         photos.addAll(tempHolder);
-        //MAKE THIS FRAGMENT SO CAN PUSH OFF BACKSTACK
         refresh();
-    }*/
+    }
 
     @Override
     public void addPhoto(Photo photo) {
