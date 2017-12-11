@@ -42,6 +42,8 @@ import java.util.List;
 
 import edu.towson.cosc431.alexander.photospot.adapters.PhotosAdapter;
 import edu.towson.cosc431.alexander.photospot.database.PhotoDataSource;
+import edu.towson.cosc431.alexander.photospot.interfaces.ASyncResponse;
+import edu.towson.cosc431.alexander.photospot.interfaces.IController;
 import edu.towson.cosc431.alexander.photospot.interfaces.IModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 import pub.devrel.easypermissions.AfterPermissionGranted;
