@@ -9,7 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import edu.towson.cosc431.alexander.photospot.database.PhotoDataSource;
 import edu.towson.cosc431.alexander.photospot.interfaces.IController;
+import edu.towson.cosc431.alexander.photospot.interfaces.IModel;
 import edu.towson.cosc431.alexander.photospot.models.Photo;
 
 /**
@@ -23,6 +25,8 @@ public class NewPhotoActivity extends AppCompatActivity {
     private Button saveBtn;
     private IController controller;
     private String photoPath;
+    private IModel photoModel = new PhotoModel(PhotoDataSource.getInstance(this));
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,7 @@ public class NewPhotoActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                photoModel.addPhoto(new Photo(titleEt.getText().toString(), descEt.getText().toString(), photoPath, authorEt.getText().toString()));
                 controller.addPhoto(new Photo(titleEt.getText().toString(), descEt.getText().toString(), photoPath, authorEt.getText().toString()));
                 controller.refresh();
                 finish();
