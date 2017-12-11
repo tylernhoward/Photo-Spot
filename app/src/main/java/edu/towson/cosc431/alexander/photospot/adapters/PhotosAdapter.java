@@ -102,16 +102,21 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
         protected ArrayList<Photo> doInBackground(Void... params) {
             LocationModel location = new LocationModel().getInstance();
             String json = GeoLocationDownloader.downloadJson(location.getLatitude(),location.getLongitude());
-
+            String city = "";
+            String state = "";
+            String country = "";
             try {
                 JSONObject object = new JSONObject(json);
-                JSONArray array = object.getJSONArray("results");
-                JSONObject results = array.getJSONObject(0);
-                String address = results.getString("formatted_address");
+                JSONObject address = object.getJSONObject("address");
+                if(address.getString("city")!=null){city = address.getString("city");}
+                else if(address.getString("town")!=null){city = address.getString("town");}
+                else if(address.getString("hamlet")!=null){city = address.getString("hamlet");};
+                state = address.getString("state");
+                country = address.getString("country");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return flickr.search("Towson", "Maryland");
+            return flickr.search(city, state);
         }
     }
 }
