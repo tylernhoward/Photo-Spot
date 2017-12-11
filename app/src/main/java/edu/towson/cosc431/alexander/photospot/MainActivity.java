@@ -122,9 +122,12 @@ public class MainActivity extends AppCompatActivity
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            LocationModel locationModel = new LocationModel().getInstance();
-            locationModel.setLatitude(location.getLatitude());
-            locationModel.setLongitude(location.getLongitude());
+            if(location != null){
+                LocationModel locationModel = new LocationModel().getInstance();
+                locationModel.setLatitude(location.getLatitude());
+                locationModel.setLongitude(location.getLongitude());
+            }
+
             Log.d("permissions", "Granted");
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.camera_and_location_rationale), RC_LOCATION, perms);

@@ -27,7 +27,6 @@ public class GeoLocationDownloader {
                 Lat= Lat + String.valueOf(latitude);
                 Long = Long + String.valueOf(longitude);
                 url = new URL(API + Key + Lat + Long);
-                Log.d("__________",url.toString());
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                 connection.setRequestMethod("GET");
                 InputStream stream = connection.getInputStream();

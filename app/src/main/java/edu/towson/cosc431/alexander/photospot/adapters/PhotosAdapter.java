@@ -102,7 +102,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
         protected ArrayList<Photo> doInBackground(Void... params) {
             LocationModel location = new LocationModel().getInstance();
             String json = GeoLocationDownloader.downloadJson(location.getLatitude(),location.getLongitude());
-            Log.d("-------------",json);
             String city = "";
             String state = "";
             String country = "";

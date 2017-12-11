@@ -37,14 +37,12 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
             }
         });
         photoTitle = (TextView) itemView.findViewById(R.id.photoTitle);
-        photoDescription = (TextView) itemView.findViewById(R.id.photoDescription);
         imageView = (ImageView) itemView.findViewById(R.id.imageView);
     }
 
     public void bindTodo(Photo photo) {
         this.photo = photo;
         photoTitle.setText(photo.getTitle());
-        photoDescription.setText(photo.getDescription());
         Picasso.with(itemView.getContext()).load(photo.getImageURL()).fit().into(imageView);
     }
 }

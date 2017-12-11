@@ -129,9 +129,10 @@ public class FlickrFetcher {
                 String secret = parser.getAttributeValue(null, "secret");
                 String title = parser.getAttributeValue(null, "title");
                 String owner = parser.getAttributeValue(null, "owner");
+                String desc = parser.getAttributeValue(null, "description");
                 String smallUrl = parser.getAttributeValue(null, EXTRA_SMALL_URL);
                 String imageUrl = "https://farm"+farm+".staticflickr.com/"+server+"/"+id+"_"+secret+".jpg";
-                Photo photo = new Photo(title, "desc", imageUrl , owner);
+                Photo photo = new Photo(title, desc, imageUrl , owner);
                 items.add(photo);
                 Log.d(TAG, photo.getImageURL());
             }
