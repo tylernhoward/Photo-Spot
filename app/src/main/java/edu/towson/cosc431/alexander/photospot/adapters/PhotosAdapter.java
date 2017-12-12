@@ -56,7 +56,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
         //THIS NEEDS TO GO AWAY
        // if(photo.isVisible()) {
             this.holder = holder;
-            holder.bindTodo(photo);
+            holder.bindPhoto(photo);
        // }
     }
 

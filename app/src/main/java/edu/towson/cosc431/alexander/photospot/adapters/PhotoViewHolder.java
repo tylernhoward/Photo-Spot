@@ -43,7 +43,7 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
         imageView = (ImageView) itemView.findViewById(R.id.imageView);
     }
 
-    public void bindTodo(Photo photo) {
+    public void bindPhoto(Photo photo) {
         this.photo = photo;
         photoTitle.setText(photo.getTitle());
 
