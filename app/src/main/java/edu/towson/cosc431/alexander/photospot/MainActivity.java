@@ -242,8 +242,10 @@ public class MainActivity extends AppCompatActivity
         refresh();
     }
     public void viewGallery(){
-        photos.clear();
-        photos.addAll(tempHolder);
+        if (tempHolder.size() != 0) {
+            photos.clear();
+            photos.addAll(tempHolder);
+        }
         refresh();
     }
 
@@ -329,7 +331,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void refresh() {
-
         adapter.notifyDataSetChanged();
     }
 
